@@ -3,7 +3,7 @@
  *
  * - API Java (Spring Boot, Render): usuários, login (JWT), ocorrências e a
  *   triagem por IA generativa.
- * - API .NET (Minimal API, Azure): apoios, comentários e etiquetas. Aceita o
+ * - API .NET (Minimal API, Azure App Service): apoios, comentários e etiquetas. Aceita o
  *   mesmo token emitido pela Java.
  *
  * Podem ser trocados por variáveis `EXPO_PUBLIC_*` (arquivo `.env`, ver
@@ -19,7 +19,7 @@ export const API_JAVA_URL = semBarraFinal(
 
 export const API_NET_URL = semBarraFinal(
   process.env.EXPO_PUBLIC_API_NET_URL ??
-    'http://consertaai-dotnet-556649.brazilsouth.azurecontainer.io:8080'
+    'https://consertaai-api-rm563454.azurewebsites.net'
 );
 
 /**

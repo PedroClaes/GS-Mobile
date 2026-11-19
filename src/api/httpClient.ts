@@ -51,6 +51,7 @@ async function lerCorpo(resposta: Response): Promise<unknown> {
 
 async function requisitar<T>(
   base: string,
+  encerraSessaoEm401: boolean,
   metodo: Metodo,
   caminho: string,
   { corpo, cabecalhos, parametros }: Opcoes = {}
@@ -81,32 +82,35 @@ async function requisitar<T>(
   const dados = await lerCorpo(resposta);
 
   if (!resposta.ok) {
-    // Só derruba a sessão se a chamada estava autenticada: um 401 no login
-    // significa senha errada, não token vencido.
-    if (resposta.status === 401 && tokenEnviado) aoExpirarSessao?.();
+    // Só derruba a sessão se a chamada estava autenticada (um 401 no login é
+    // senha errada) e se veio da API que emitiu o token. Um 401 da .NET com um
+    // token que a Java aceita é configuração divergente entre as APIs, não
+    // sessão vencida: aí a tela mostra o erro e o usuário continua logado.
+    if (resposta.status === 401 && tokenEnviado && encerraSessaoEm401)
+      aoExpirarSessao?.();
     throw erroDaResposta(resposta.status, dados, resposta.headers.get('Retry-After'));
   }
 
   return dados as T;
 }
 
-function criarCliente(base: string) {
+function criarCliente(base: string, encerraSessaoEm401: boolean) {
   return {
     get: <T>(caminho: string, opcoes?: Opcoes) =>
-      requisitar<T>(base, 'GET', caminho, opcoes),
+      requisitar<T>(base, encerraSessaoEm401, 'GET', caminho, opcoes),
     post: <T>(caminho: string, opcoes?: Opcoes) =>
-      requisitar<T>(base, 'POST', caminho, opcoes),
+      requisitar<T>(base, encerraSessaoEm401, 'POST', caminho, opcoes),
     put: <T>(caminho: string, opcoes?: Opcoes) =>
-      requisitar<T>(base, 'PUT', caminho, opcoes),
+      requisitar<T>(base, encerraSessaoEm401, 'PUT', caminho, opcoes),
     patch: <T>(caminho: string, opcoes?: Opcoes) =>
-      requisitar<T>(base, 'PATCH', caminho, opcoes),
+      requisitar<T>(base, encerraSessaoEm401, 'PATCH', caminho, opcoes),
     delete: <T = void>(caminho: string, opcoes?: Opcoes) =>
-      requisitar<T>(base, 'DELETE', caminho, opcoes),
+      requisitar<T>(base, encerraSessaoEm401, 'DELETE', caminho, opcoes),
   };
 }
 
 /** API Java: login, usuários, ocorrências e triagem por IA. */
-export const apiJava = criarCliente(API_JAVA_URL);
+export const apiJava = criarCliente(API_JAVA_URL, true);
 
 /** API .NET: apoios, comentários e etiquetas. */
-export const apiNet = criarCliente(API_NET_URL);
+export const apiNet = criarCliente(API_NET_URL, false);
