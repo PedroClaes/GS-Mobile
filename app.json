@@ -3,6 +3,11 @@
     "name": "Conserta Aí",
     "slug": "consertaai-mobile",
     "version": "1.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "93f852f2-8b56-4df0-8487-d36c5accf88e"
+      }
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -40,6 +45,7 @@
           }
         }
       ]
-    ]
+    ],
+    "owner": "pedroclaes"
   }
 }
