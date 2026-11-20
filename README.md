@@ -12,7 +12,7 @@ O **Conserta Aí** é um app de zeladoria urbana com participação cidadã. O m
 | **Como o app resolve**  | <ul><li>A **IA generativa** (API Java) classifica cada ocorrência: categoria, urgência, órgão responsável, prazo e possível duplicada.</li><li>Em vez de duplicar, o cidadão **apoia** a ocorrência que já existe (API .NET), e a prioridade dela sobe na fila.</li><li>A linha do tempo mostra cada mudança de status.</li></ul> |
 | **ODS**                 | **11** (cidades sustentáveis), **9** (infraestrutura) e **10** (redução das desigualdades)                                                                                                                                                                                                                                        |
 
-📺 **Vídeo de demonstração:** LINK_DO_VIDEO
+📺 **Vídeo de demonstração:** https://youtu.be/gkn41yIynRU
 
 ---
 
